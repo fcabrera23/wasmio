@@ -13,7 +13,9 @@ Akri only works on Linux nodes and **containerd-wasm-shim** only supports Linux 
 - You will need an ONVIF camera for this demo.
 - Check [AKS Edge Essentials requirements and support matrix](https://learn.microsoft.com/azure/aks/hybrid/aks-edge-system-requirements).
 
+## Building containers
 
+This sample will use pre-built containers and pull them from the Azure Light Edge public container registry. If you want to use your own containers, you can build and push your containers following the readmes of both **http-server** and **video-streaming-app**. 
 
 ## Instructions
 
