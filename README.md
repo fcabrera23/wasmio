@@ -26,28 +26,28 @@ Akri only works on Linux nodes and **containerd-wasm-shim** only supports Linux 
     Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Azure/AKS-Edge/preview/samples/wasm/Set-AksEdgeWasmRuntime.ps1" -OutFile ".\Set-AksEdgeWasmRuntime.ps1"
     Unblock-File -Path ".\Set-AksEdgeWasmRuntime.ps1"
     ```
-6. Run the `Set-AksEdgeWasmRuntime` cmdlet to enable the *containerd-wasm-shim*. We will be using **v0.4.0** for this demo.
+6. Run the `Set-AksEdgeWasmRuntime` cmdlet to enable the *containerd-wasm-shim*. We will be using the latest available version (**v0.4.0**) for this demo.
 
     ```powershell
-    .\Set-AksEdgeWasmRuntime.ps1 -enable -shimVersion v0.4.0
-    ```
+    .\Set-AksEdgeWasmRuntime.ps1 -enable 
+   ```
 
    | Parameter | Options | Description | 
    | --------- | ------- | ----------- |
    | enable | None | If this flag is present, the command enables the feature.|
    | shimOption | spin, slight, both | containerd-wasm-shim version. For more information, see https://github.com/deislabs/containerd-wasm-shims |
    | shimVersion | None | containerd-wasm-shim version. For more information, see https://github.com/deislabs/containerd-wasm-shims |
-    
 
 7. Apply the *runtime.yaml* to create the *wasmtime-slight* and *wasmtime-spin* rumtime classes.
 
     ```powershell
     kubectl apply -f https://github.com/deislabs/containerd-wasm-shims/releases/download/v0.4.0/runtime.yaml
     ```
-    
+
     If everything was correctly created, you should see the two runtime classes.
 
     ```bash
+    C:> kubectl get runtimeclass
     NAME              HANDLER   AGE
     wasmtime-slight   slight    5s
     wasmtime-spin     spin      5s
@@ -57,15 +57,15 @@ Akri only works on Linux nodes and **containerd-wasm-shim** only supports Linux 
     ```powershell
     helm repo add akri-helm-charts https://project-akri.github.io/akri/
     ```
-    
+
     If you have already added Akri helm chart previously, update your repo for the latest build:
-    
+
     ```powershell
     helm repo update
     ```
 
 9. Install Akri using Helm. When installing Akri, specify that you want to deploy the ONVIF discovery handlers by setting the helm value `onvif.discovery.enabled=true`. Also, specify that you want to deploy the ONVIF video broker:  
-    
+
    ```powershell
    helm install akri akri-helm-charts/akri `
     --set kubernetesDistro=<insert k3s or k8s depending on what you are using> `
@@ -75,7 +75,7 @@ Akri only works on Linux nodes and **containerd-wasm-shim** only supports Linux 
     --set onvif.configuration.brokerPod.image.repository='ghcr.io/project-akri/akri/onvif-video-broker' `
     --set onvif.configuration.brokerPod.image.tag='latest'
    ```
-   
+
    Learn more about the [ONVIF configuration settings here](https://docs.akri.sh/discovery-handlers/onvif).
 
 10. Run the following command to open port for WS-Discovery within the Linux node and save the IP tables:
@@ -84,7 +84,7 @@ Akri only works on Linux nodes and **containerd-wasm-shim** only supports Linux 
     Invoke-AksEdgeNodeCommand -command "sudo iptables -A INPUT -p udp --sport 3702 -j ACCEPT"
     Invoke-AksEdgeNodeCommand -command "sudo iptables-save | sudo tee /etc/systemd/scripts/ip4save > /dev/null"
     ```
-    
+
 11. Verify that Akri can now discover your camera. You should see an Akri instance for your ONVIF camera:
 
     ```powershell

@@ -15,7 +15,7 @@ spec:
       runtimeClassName: wasmtime-slight
       containers:
         - name: wasm-inference
-          image: winiotsaleskit.azurecr.io/wasm-inference:latest
+          image: winiotsaleskit.azurecr.io/wasm-inference:wasmio
           command: ["/"]
           env:
           - name: BASE_X1
