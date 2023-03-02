@@ -48,5 +48,5 @@ CONFIGURATION_NAME="akri-udev" python3 ./streaming.py
 ```
 
 ## Building a container
-This sample contains a *Dockerfile* you can use for creating a container using the `docker build` command. 
+This sample contains a *Dockerfile.video-streaming-app* you can use for creating a container using the `docker build` command. 
 

@@ -17,6 +17,7 @@ import numpy as np
 import random
 import requests
 import json
+from os import environ
 
 class CameraFeed:
     def __init__(self, url):
@@ -44,27 +45,32 @@ class CameraFeed:
     def generator_func(self):
         while not self.stop_event.wait(0.01):
             frame = self.queue.get(True, None)
-            image_array = np.frombuffer(frame, dtype=np.uint8)
-            image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
+            
+            # If there's no WASM ONNX service, show frame without BBOX
+            if environ.get('WASM_SOURCE_SVC') is not None:
+                image_array = np.frombuffer(frame, dtype=np.uint8)
+                image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
 
-            # Define the API endpoint URL
-            url = os.environ['WASM_SOURCE_SVC']
+                # Define the API endpoint URL
+                url = os.environ['WASM_SOURCE_SVC']
 
-            # Define the JSON payload to send to the API
-            payload = {'image': ""}
+                # Define the JSON payload to send to the API
+                payload = {'image': ""}
 
-            # Send a POST request to the API with the JSON payload
-            response = requests.post(url, json=payload)
+                # Send a POST request to the API with the JSON payload
+                response = requests.post(url, json=payload)
 
-            # Parse the JSON 
-            json_data = json.loads(response.text)
+                # Parse the JSON 
+                json_data = json.loads(response.text)
 
-            confLevelStr =  "Confidence: {0}".format(json_data["confLevel"])
-            cv2.rectangle(image, (json_data["x1"], json_data["y1"]), (json_data["x2"], json_data["y2"]), (0, 255, 0), 2)
-            cv2.putText(image, confLevelStr, (json_data["x1"], json_data["y1"] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0,255,0), 2)
+                confLevelStr =  "Confidence: {0}".format(json_data["confLevel"])
+                cv2.rectangle(image, (json_data["x1"], json_data["y1"]), (json_data["x2"], json_data["y2"]), (0, 255, 0), 2)
+                cv2.putText(image, confLevelStr, (json_data["x1"], json_data["y1"] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0,255,0), 2)
 
-            ret, buffer = cv2.imencode('.jpg', image)
-            yield (b'--frame\r\nContent-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
+                ret, buffer = cv2.imencode('.jpg', image)
+                yield (b'--frame\r\nContent-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
+            else:
+                yield (b'--frame\r\nContent-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
     # Loops, creating gRPC client and grabing frame from camera serving specified url.
     def get_frames(self):
