@@ -1,4 +1,6 @@
 # Video Streaming Application
+This application is a fork from [Akri - Video streaming app](https://github.com/project-akri/akri/tree/main/samples/apps/video-streaming-app). 
+
 ## Overview
 This application serves as an example streaming service for the [ONVIF broker](../../brokers/onvif-video-broker) and
 [USB camera broker](../../brokers/udev-video-broker). It is used in Akri's [end to end
@@ -44,3 +46,7 @@ CAMERA_COUNT="2"  CAMERAS_SOURCE_SVC=10.2.2.2 CAMERA1_SOURCE_SVC=10.1.2.3 CAMERA
 ```sh
 CONFIGURATION_NAME="akri-udev" python3 ./streaming.py
 ```
+
+## Building a container
+This sample contains a *Dockerfile* you can use for creating a container using the `docker build` command. 
+
