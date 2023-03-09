@@ -39,6 +39,7 @@ This sample will use pre-built containers and pull them from the Azure Light Edg
    | enable | None | If this flag is present, the command enables the feature.|
    | shimOption | spin, slight, both | containerd-wasm-shim version. For more information, see https://github.com/deislabs/containerd-wasm-shims |
    | shimVersion | None | containerd-wasm-shim version. For more information, see https://github.com/deislabs/containerd-wasm-shims |
+   | shimUrl | None | URL to downlaod a speciifc shim |
 
 7. Apply the *runtime.yaml* to create the *wasmtime-slight* and *wasmtime-spin* rumtime classes.
 
