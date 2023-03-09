@@ -63,7 +63,7 @@ class CameraFeed:
                 # Parse the JSON 
                 json_data = json.loads(response.text)
 
-                confLevelStr =  "Confidence: {0}".format(json_data["confLevel"])
+                confLevelStr =  "Confidence: Apple {0}".format(json_data["confLevel"])
                 cv2.rectangle(image, (json_data["x1"], json_data["y1"]), (json_data["x2"], json_data["y2"]), (0, 255, 0), 2)
                 cv2.putText(image, confLevelStr, (json_data["x1"], json_data["y1"] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0,255,0), 2)
 
