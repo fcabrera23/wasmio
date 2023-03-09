@@ -25,7 +25,8 @@ param(
     [Switch] $enable,
     [string] $shimVersion = "v0.4.0",
     [ValidateSet("spin", "slight", "both")]
-    [string] $shimOption = "both"
+    [string] $shimOption = "both",
+    [string] $shimUrl = ""
 )
 
 Write-Host "1. Checking AKS Edge Essentials dependencies" -ForegroundColor Green
@@ -54,9 +55,18 @@ else
 
 if ($enable.IsPresent)
 {
-    Write-Host "2. Downloading shim verison $shimVersion" -ForegroundColor green
-    Invoke-AksEdgeNodeCommand "wget -O /home/aksedge-user/containerd-wasm-shim.tar.gz https://github.com/deislabs/containerd-wasm-shims/releases/download/$shimVersion/containerd-wasm-shims-v1-linux-x86_64.tar.gz"
 
+    if ($shimUrl -eq "")
+    {
+        Write-Host "2. Downloading shim verison $shimVersion" -ForegroundColor green
+        Invoke-AksEdgeNodeCommand "wget -O /home/aksedge-user/containerd-wasm-shim.tar.gz https://github.com/deislabs/containerd-wasm-shims/releases/download/$shimVersion/containerd-wasm-shims-v1-linux-x86_64.tar.gz"
+    }
+    else
+    {
+        Write-Host "2. Downloading shim from $shimUrl" -ForegroundColor green
+        Invoke-AksEdgeNodeCommand "wget -O /home/aksedge-user/containerd-wasm-shim.tar.gz $shimUrl"
+    }
+    
     Write-Host "3. Unpacking and moving shim to appropiate folder" -ForegroundColor green
     Invoke-AksEdgeNodeCommand "tar -xvf /home/aksedge-user/containerd-wasm-shim.tar.gz && sudo mkdir /var/lib/bin" -ignoreError | Out-Null
 
