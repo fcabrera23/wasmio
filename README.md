@@ -25,7 +25,7 @@ This sample will use pre-built containers and pull them from the Azure Light Edg
 4. Move to an appropriate working directory
 5. Download [Set-AksEdgeWasmRuntime.ps1](./Set-AksEdgeWasmRuntime.ps1):
     ```powershell
-    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Azure/AKS-Edge/preview/samples/wasm/Set-AksEdgeWasmRuntime.ps1" -OutFile ".\Set-AksEdgeWasmRuntime.ps1"
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/fcabrera23/wasmio/main/Set-AksEdgeWasmRuntime.ps1" -OutFile ".\Set-AksEdgeWasmRuntime.ps1"
     Unblock-File -Path ".\Set-AksEdgeWasmRuntime.ps1"
     ```
 6. Run the `Set-AksEdgeWasmRuntime` cmdlet to enable the *containerd-wasm-shim*. We will be using the latest available version (**v0.4.0**) for this demo.
